@@ -38,3 +38,74 @@ function fiboEvenSum(number) {
   return terms.filter( x => x % 2 === 0).reduce( (a,b) => a + b);
 }
 //console.log(fiboEvenSum(23));  //60696
+
+/* Problem 3: Largest prime factor
+
+The prime factors of 13195 are 5, 7, 13 and 29.
+What is the largest prime factor of the given number? */
+
+// First attempt
+function prime(number) {
+  let prime = false, factor = 2;
+  for (factor; factor <= number; factor++) {
+    if (number / factor === 1) {
+      prime = true;
+    } else if (number % factor !== 0) {
+      continue;
+    } else {
+      break;
+    }
+  }
+  return prime;
+}
+
+function largestPrimeFactor(number) {
+  let primes = [];
+  function breakdown(number, count = 2) {
+    for (count; count <= number; count++) {
+      if (number === count && prime(count)) {
+        console.log("1, number: " + number + ", count: " + count);
+        primes.push(count);
+        break;
+      }
+      if (number % count === 0) {
+        number = number / count;
+        if (prime(count) && prime(number)) {
+          primes.push(count);
+          primes.push(number);
+          break;
+        } 
+        if (prime(count) && !prime(number)) {
+          primes.push(count);
+          breakdown(number, count);
+          break;
+        } else {
+          breakdown(count);
+          break;
+        }
+      }
+    }
+  }
+  breakdown(number);
+  console.log(primes)
+  return Math.max(...primes);
+}
+//console.log(largestPrimeFactor(24));  //6875
+
+// Second Attempt
+function largestPFactor(number) {
+  let largest, factor = 2;
+  for (factor; factor <= number; factor++) {
+    //console.log(`number: ${number}, factor: ${factor}`)
+    if (number % factor === 0) {
+      largest = factor;
+      number = number / largest;
+      //console.log(`largest: ${largest}, number: ${number}`)
+      factor--;  // keep factor the same to check next number
+    }
+  }
+  return largest;
+}
+//console.log(largestPFactor(24));
+
+
