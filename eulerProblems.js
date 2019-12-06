@@ -109,3 +109,82 @@ function largestPFactor(number) {
 //console.log(largestPFactor(24));
 
 
+/* Project Euler: Problem 4: Largest palindrome product
+
+A palindromic number reads the same both ways. The largest palindrome made from the product of two 2-digit numbers is 9009 = 91 × 99.
+Find the largest palindrome made from the product of two n-digit numbers. */
+// First attempt
+function largestPalindromeProduct(n) {
+  function startingNumber(length) {
+    let num = []
+    for (let i = 0; i < length; i++) {
+      num.push("9");
+    }
+    return Number(num.join(""));
+  }
+  let number1 = startingNumber(n);
+  let number2 = startingNumber(n);
+
+  function palindrome(num) {
+    let result = true;
+    let numArr = num.toString().split("").map(Number);
+    let start = 0;
+    let end = num.toString().split("").length;
+    for (start; start <= Math.floor(end / start); start++) {
+      let check = end - 1 - start;
+      if (numArr[start] === numArr[check]) {
+        continue;
+      } else {
+        result = false;
+        break;
+      }
+    }
+    return result;
+  }
+  
+  let result = null;
+  for (number1; number1 >= 0; number1--) {
+    
+    for (number2; number2 >= 0; number2--) {
+      let value = number1 * number2;
+      
+      if (palindrome(value)) {
+        //console.log(`number1: ${number1}, number2: ${number2}, value: ${value}`);
+        if (result < value) result = value;
+        break;
+      }
+    }
+    number2 = number1;
+  }
+  return result;
+}
+//console.log(largestPalindromeProduct(3));
+
+// Second Attempt (shorten)
+function largestPalProduct(n) {
+  function highest(length) {
+    let num = []
+    for (let i = 0; i < length; i++) {
+      num.push("9");
+    }
+    return Number(num.join(""));
+  }
+  let highNum = highest(n);
+  
+  let result = null, number1 = highNum, number2 = highNum;
+  for (number1; number1 >= 0; number1--) {
+    for (number2; number2 >= 0; number2--) {
+      let value = number1 * number2;
+      let reverse = Number(new String(value).split("").reverse().join(""));
+      if (reverse === value) {
+        if (result < value) {
+          result = value;
+          break;
+        }
+      }
+    }
+    number2 = number1;
+  }
+  return result;
+}
+//console.log(largestPalProduct(3)); //906609
