@@ -188,3 +188,81 @@ function largestPalProduct(n) {
   return result;
 }
 //console.log(largestPalProduct(3)); //906609
+
+/* Project Euler: Problem 5: Smallest multiple
+
+2520 is the smallest number that can be divided by each of the numbers from 1 to 10 without any remainder.
+What is the smallest positive number that is evenly divisible by all of the numbers from 1 to n? */
+// 1st attempt
+function smallestMult(n) {
+  let numerator = n;
+  let denomenator = n;
+  for (numerator; ; numerator++) {
+    for (denomenator; denomenator > 0; denomenator--) {
+      if (numerator % denomenator === 0) continue;
+      else break;
+    }
+    if (denomenator === 0) {
+      break;
+    } else {
+      denomenator = n;
+      continue;
+    }
+  }
+  return numerator;
+}
+//console.log(smallestMult(20));
+// 2nd attempt, longer but much faster
+function smallestMultiple(n) {
+  function lcm(a, b) {
+    function getPrimes(number) {
+      let primes = [], factor = 2;
+      for (factor; factor <= number; factor++) {
+        if (number % factor === 0) {
+          primes.push(factor);
+          number = number / Math.max(...primes);
+          factor--;  // keep factor the same to check next number
+        }
+      }
+      return primes;
+    }
+
+    let aPrimes = getPrimes(a);
+    let bPrimes = getPrimes(b);
+    let longestArr = aPrimes.length >= bPrimes.length ? aPrimes.length : bPrimes.length;
+    let lcmArr = [];
+    for (let i = 0; i < longestArr; i++) {
+      if (aPrimes[i] === bPrimes[i]) {
+        lcmArr.push(aPrimes[i]);
+        aPrimes.shift();
+        bPrimes.shift();
+        i--;
+        longestArr = aPrimes.length >= bPrimes.length ? aPrimes.length : bPrimes.length;
+      }
+      if (aPrimes[i] - bPrimes[i] > 0) {
+        lcmArr.push(bPrimes[i]);
+        bPrimes.shift();
+        i--;
+        longestArr = aPrimes.length >= bPrimes.length ? aPrimes.length : bPrimes.length;
+      }
+      if (aPrimes[i] - bPrimes[i] < 0) {
+        lcmArr.push(aPrimes[i]);
+        aPrimes.shift();
+        i--;
+        longestArr = aPrimes.length >= bPrimes.length ? aPrimes.length : bPrimes.length;
+      }
+    }
+    let concatArrs = lcmArr.concat(aPrimes, bPrimes);
+    return concatArrs.reduce( (a, b) => a * b);
+  }
+
+  let multiples, a = 1, b = 2;
+  while (b <= n) {
+    let multiple = lcm(a, b);
+    multiples = multiple;
+    a = multiple;
+    b++;
+  }
+  return multiples;
+} 
+//console.log(smallestMultiple(20));
