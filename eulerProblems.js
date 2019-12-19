@@ -14,7 +14,7 @@ function multiplesOf3and5(number) {
     }
   }
   console.log(multiples);
-  return multiples.reduce( (a, b) => a + b);
+  return multiples.reduce((a, b) => a + b);
 }
 //console.log(multiplesOf3and5(1000));
 
@@ -30,12 +30,12 @@ function fiboEvenSum(number) {
   terms[0] = 1;
   terms[1] = 2;
   // if number is less than higest number in starting terms array
-  if (number <= terms[1]) return terms[1]; 
+  if (number <= terms[1]) return terms[1];
   while (index < number) {
     terms[index] = terms[index - 1] + terms[index - 2];
     index++;
   }
-  return terms.filter( x => x % 2 === 0).reduce( (a,b) => a + b);
+  return terms.filter(x => x % 2 === 0).reduce((a, b) => a + b);
 }
 //console.log(fiboEvenSum(23));  //60696
 
@@ -74,7 +74,7 @@ function largestPrimeFactor(number) {
           primes.push(count);
           primes.push(number);
           break;
-        } 
+        }
         if (prime(count) && !prime(number)) {
           primes.push(count);
           breakdown(number, count);
@@ -141,13 +141,13 @@ function largestPalindromeProduct(n) {
     }
     return result;
   }
-  
+
   let result = null;
   for (number1; number1 >= 0; number1--) {
-    
+
     for (number2; number2 >= 0; number2--) {
       let value = number1 * number2;
-      
+
       if (palindrome(value)) {
         //console.log(`number1: ${number1}, number2: ${number2}, value: ${value}`);
         if (result < value) result = value;
@@ -170,7 +170,7 @@ function largestPalProduct(n) {
     return Number(num.join(""));
   }
   let highNum = highest(n);
-  
+
   let result = null, number1 = highNum, number2 = highNum;
   for (number1; number1 >= 0; number1--) {
     for (number2; number2 >= 0; number2--) {
@@ -253,7 +253,7 @@ function smallestMultiple(n) {
       }
     }
     let concatArrs = lcmArr.concat(aPrimes, bPrimes);
-    return concatArrs.reduce( (a, b) => a * b);
+    return concatArrs.reduce((a, b) => a * b);
   }
 
   let multiples, a = 1, b = 2;
@@ -264,7 +264,7 @@ function smallestMultiple(n) {
     b++;
   }
   return multiples;
-} 
+}
 //console.log(smallestMultiple(20));
 
 /* Project Euler: Problem 6: Sum square difference
@@ -285,6 +285,28 @@ function sumSquareDifference(n) {
     squared.push(Math.pow(count, 2));
     count++;
   }
-  return Math.pow(sum, 2) - squared.reduce( (a, b) => a + b);
+  return Math.pow(sum, 2) - squared.reduce((a, b) => a + b);
 }
 //console.log(sumSquareDifference(100));
+
+/* Project Euler: Problem 7: 10001st prime
+
+By listing the first six prime numbers: 2, 3, 5, 7, 11, and 13, we can see that the 6th prime is 13.
+What is the nth prime number? */
+
+function nthPrime(n) {
+  let number = 3, primes = [2];
+  while (primes.length < n) {
+    let i = 0, isPrime = true
+    for (i; i < primes.length; i++) {
+      if (number % primes[i] === 0) {
+        isPrime = false;
+        break;
+      }
+    }
+    if (isPrime) primes.push(number);
+    number += 2; // 2 is only even prime number, so only check odd
+  }
+  return primes[primes.length - 1];
+}
+console.log(nthPrime(10001));
